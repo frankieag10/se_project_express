@@ -19,6 +19,10 @@ mongoose.connect(
   },
 );
 
+const routes = require("./routes");
+app.use(express.json());
+app.use(routes);
+
 app.get("/", (req, res) => {
   res.send("Hello, Express!");
 });
