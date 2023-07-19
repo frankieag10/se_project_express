@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator: (value) => validator.isURL(value),
+      validator: (value) => validator.isUrl(value),
       message: "You must enter a valid URL for the avatar.",
     },
   },
@@ -32,11 +32,11 @@ const clothingItemSchema = new mongoose.Schema({
     required: true,
     enum: ["hot", "warm", "cold"],
   },
-  imageURL: {
+  imageUrl: {
     type: String,
     required: true,
     validate: {
-      validator: (value) => validator.isURL(value),
+      validator: (value) => validator.isUrl(value),
       message: "You must enter a valid URL for the image URL.",
     },
   },
