@@ -1,28 +1,46 @@
-const ClothingItem = require("../models/clothingItems");
-
-const createItem = (req, res) => {
-  console.log(req);
-  console.log(req.body);
-
-  const { name, weather, imageUrl, owner } = req.body;
-
-  // Check if the owner field is provided
-  if (!owner) {
-    return res.status(400).send({ error: "Owner is required" });
-  }
-
-  ClothingItem.create({ name, weather, imageUrl, owner })
-    .then((item) => {
-      console.log(item);
-      res.send({ data: item });
+const clothingItem = require("../models/clothingItems");
+const { handleError } = require("../utils/config");
+const getClothingItem = (req, res) => {
+  clothingItem
+    .find({})
+    .then((data) => {
+      res.status(200).send(data);
     })
-    .catch((error) => {
-      res
-        .status(500)
-        .send({ error: "Error creating item", message: error.message });
+    .catch((err) => {
+      handleError(req, res, err);
     });
 };
 
-module.exports = {
-  createItem,
+const createClothingItem = (req, res) => {
+  console.log("user id: ", req.user._id);
+
+  const { name, weather, imageUrl } = req.body;
+  clothingItem
+    .create({ name, weather, imageUrl, owner: req.user._id })
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.error(err);
+
+      handleError(req, res, err);
+    });
 };
+
+const deleteClothingItem = (req, res) => {
+  const { itemId } = req.params;
+  console.log("item id:", itemId);
+  clothingItem
+    .findByIdAndDelete(itemId)
+    .orFail()
+    .then((data) => {
+      res.status(200).send(data.toJSON());
+    })
+    .catch((err) => {
+      console.error(err);
+
+      handleError(req, res, err);
+    });
+};
+
+module.exports = { getClothingItem, createClothingItem, deleteClothingItem };

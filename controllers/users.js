@@ -1,5 +1,5 @@
 const User = require("../models/users");
-const handleError = require("../utils/config");
+const { handleError } = require("../utils/config");
 
 // GET /users — returns all users
 const getUsers = (req, res) => {
@@ -16,24 +16,22 @@ const getUsers = (req, res) => {
 const getUser = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
-    .then((user) => {
-      if (user) {
-        res.status(200).send(user);
-      } else {
-        res.status(404).send("User not found");
-      }
+    .orFail()
+    .then((data) => {
+      res.status(200).send(data);
     })
     .catch((err) => {
+      console.error(err);
       handleError(req, res, err);
     });
 };
-
 // POST /users — creates a new user
 const createUser = (req, res) => {
   const { name, avatar } = req.body;
+  console.log(name, avatar);
   User.create({ name, avatar })
-    .then((user) => {
-      res.status(201).send(user);
+    .then((data) => {
+      res.send(data);
     })
     .catch((err) => {
       handleError(req, res, err);

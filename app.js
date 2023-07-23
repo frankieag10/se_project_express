@@ -1,44 +1,35 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
 const { ERROR_404 } = require("./utils/errors");
+const routes = require("./routes");
 
-const app = express();
+mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db");
 const { PORT = 3001 } = process.env;
-
-mongoose.connect(
-  "mongodb://127.0.0.1:27017/wtwr_db",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  },
-  (err) => {
-    if (err) {
-      console.error("Failed to connect to MongoDB:", err);
-    } else {
-      console.log("Successfully connected to MongoDB");
-    }
-  }
-);
-
+const app = express();
+app.use(express.json());
 app.use((req, res, next) => {
   req.user = {
     _id: "5d8b8592978f8bd833ca8133", // paste the _id of the test user created in the previous step
   };
-  console.log(req.user._id);
   next();
 });
 
-const routes = require("./routes");
-app.use(express.json());
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use(limiter);
+
+app.use(helmet());
 app.use(routes);
 app.all("*", (req, res) => {
   res.status(ERROR_404).send({ message: "The requested resource not found" });
 });
-
-app.get("/", (req, res) => {
-  res.send("Hello, Express!");
-});
-
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`App started on port: ${PORT}`);
 });
