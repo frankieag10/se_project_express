@@ -2,13 +2,21 @@
 
 The back-end project is focused on creating a server for the WTWR application. You’ll gain a deeper understanding of how to work with databases, set up security and testing, and deploy web applications on a remote machine. The eventual goal is to create a server with an API and user authorization.
 
-## Running the Project
+# What technologies we used:
 
-`npm run start` — to launch the server
+Express : Express.js, or simply Express, is a back end web application framework for building RESTful APIs with Node.js, released as free and open-source software under the MIT License.
 
-`npm run dev` — to launch the server with the hot reload feature
+NodeJs : Node.js is a cross-platform, open-source server environment that can run on Windows, Linux, Unix, macOS, and more.
 
-### Testing
+Mongoose : Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment. Mongoose supports Node.js and Deno (alpha).
 
-Before committing your code, make sure you edit the file `sprint.txt` in the root folder. The file `sprint.txt` should contain the number of the sprint you're currently working on. For ex. 12
-test
+REST API : A REST API is an API that conforms to the design principles of the REST, or representational state transfer architectural style.
+
+Postman : Postman is an API Platform for developers to design, build, test and iterate their APIs.
+ESLint : ESLint is a static code analysis tool for identifying problematic patterns found in JavaScript code.
+
+# Running the Project
+
+npm run start — to launch the server
+
+npm run dev — to launch the server with the hot reload feature

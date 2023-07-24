@@ -1,5 +1,6 @@
 const clothingItem = require("../models/clothingItems");
 const { handleError } = require("../utils/config");
+
 const getClothingItem = (req, res) => {
   clothingItem
     .find({})
@@ -21,8 +22,6 @@ const createClothingItem = (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.error(err);
-
       handleError(req, res, err);
     });
 };
@@ -37,8 +36,6 @@ const deleteClothingItem = (req, res) => {
       res.status(200).send(data.toJSON());
     })
     .catch((err) => {
-      console.error(err);
-
       handleError(req, res, err);
     });
 };
