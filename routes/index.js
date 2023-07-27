@@ -1,8 +1,16 @@
-const router = require("express").Router();
-const userRouter = require("./users");
-const itemRouter = require("./clothingItems");
+const express = require("express");
+const router = express.Router();
 
-router.use("/users", userRouter);
-router.use("/items", itemRouter);
+const {
+  getUsers,
+  getUser,
+  createUser,
+  loginUser,
+} = require("../controllers/users");
+
+router.get("/", getUsers);
+router.get("/:userId", getUser);
+router.post("/", createUser);
+router.post("/login", loginUser);
 
 module.exports = router;

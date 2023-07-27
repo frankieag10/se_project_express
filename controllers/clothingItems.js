@@ -28,11 +28,24 @@ const createClothingItem = (req, res) => {
 
 const deleteClothingItem = (req, res) => {
   const { itemId } = req.params;
-  console.log("item id:", itemId);
+
   clothingItem
-    .findByIdAndDelete(itemId)
-    .orFail()
+    .findById(itemId)
+    .then((item) => {
+      if (!item) {
+        throw new Error("Item not found");
+      }
+      if (!item.owner.equals(req.user._id)) {
+        res
+          .status(403)
+          .send({ message: "You do not have permission to delete this item" });
+        return;
+      }
+
+      return clothingItem.findByIdAndDelete(itemId);
+    })
     .then((data) => {
+      if (!data) return;
       res.status(200).send(data.toJSON());
     })
     .catch((err) => {
