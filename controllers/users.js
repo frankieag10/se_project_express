@@ -68,7 +68,7 @@ const loginUser = (req, res) => {
     );
 };
 
-// GET /users/me - returns logged in user's data
+// GET /users/me - returns logged in user's data //
 const getCurrentUser = (req, res) => {
   User.findById(req.user._id)
     .then((user) => {
@@ -80,7 +80,7 @@ const getCurrentUser = (req, res) => {
     .catch((err) => handleError(req, res, err));
 };
 
-// PATCH /users/me - updates logged in user's data
+// PATCH /users/me - updates logged in user's data //
 const updateUser = (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ["name", "email", "password", "avatar"];
