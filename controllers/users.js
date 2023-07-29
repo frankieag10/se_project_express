@@ -2,7 +2,8 @@ const { StatusCodes } = require("http-status-codes");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
-const { handleError, JWT_SECRET } = require("../utils/config");
+const { handleError } = require("../utils/config");
+const { JWT_SECRET } = require("../utils/config");
 
 const createUser = async (req, res) => {
   const { name, avatar, email, password } = req.body;
@@ -50,7 +51,7 @@ const loginUser = async (req, res) => {
 
 const getCurrentUser = (req, res) =>
   User.findById(req.user._id)
-    .orFail(new Error("User not found"))
+    .orFail()
     .then((user) => res.status(StatusCodes.OK).send(user))
     .catch((err) => handleError(req, res, err));
 

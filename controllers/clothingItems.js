@@ -1,4 +1,4 @@
-const { StatusCodes } = require("http-status-codes"); // Moved up
+const { StatusCodes } = require("http-status-codes");
 const clothingItem = require("../models/clothingItems");
 const { handleError } = require("../utils/config");
 
@@ -31,24 +31,17 @@ const deleteClothingItem = (req, res) => {
 
   clothingItem
     .findById(itemId)
-    .orFail(new Error("Item not found"))
+    .orFail()
     .then((item) => {
       if (!item.owner.equals(req.user._id)) {
-        res
+        return res
           .status(StatusCodes.FORBIDDEN)
           .send({ message: "You do not have permission to delete this item" });
-        return Promise.reject();
       }
 
       return clothingItem.findByIdAndDelete(itemId);
     })
     .then((data) => {
-      if (!data) {
-        res
-          .status(StatusCodes.NOT_FOUND)
-          .send({ message: "No item found to delete" });
-        return;
-      }
       res.status(StatusCodes.OK).send(data.toJSON());
     })
     .catch((err) => {

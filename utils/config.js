@@ -1,6 +1,8 @@
 const { ERROR_400, ERROR_404, ERROR_500 } = require("./errors");
 
-module.exports.handleError = (req, res, error) => {
+const JWT_SECRET = "your_favorite_password";
+
+const handleError = (req, res, error) => {
   console.error(`error is : ${error}`);
   if (error.name === "ValidationError") {
     res.status(ERROR_400).send({
@@ -19,4 +21,9 @@ module.exports.handleError = (req, res, error) => {
       message: "An error has occurred on the server.",
     });
   }
+};
+
+module.exports = {
+  JWT_SECRET,
+  handleError,
 };

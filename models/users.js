@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-UserSchema.pre("save", function handlePasswordHash(next) {
+UserSchema("save", function handlePasswordHash(next) {
   const user = this;
 
   if (!user.isModified("password")) {

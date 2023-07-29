@@ -30,16 +30,3 @@ module.exports = (req, res, next) => {
 
   return null;
 };
-
-/* const auth = require("../middleware/auth");
-
-router.get("/items", getClothingItem);
-
-router.post("/items", auth, createClothingItem);
-
-router.delete("/items/:itemId", auth, deleteClothingItem);
-
-router.put("/items/:itemId/likes", auth, likeItem);
-
-router.delete("/items/:itemId/likes", auth, dislikeItem);
-*/
