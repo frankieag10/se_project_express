@@ -1,16 +1,19 @@
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
+const clothingItem = require("./clothingItems");
+const User = require("./users");
+const { ERROR_404 } = require("../utils/errors");
+const { login, createUser } = require("../controllers/users");
 
-const {
-  getUsers,
-  getUser,
-  createUser,
-  loginUser,
-} = require("../controllers/users");
+router.use("/items", clothingItem);
+router.use("/users", User);
 
-router.get("/", getUsers);
-router.get("/:userId", getUser);
-router.post("/", createUser);
-router.post("/login", loginUser);
+router.post("/signup", createUser);
+router.post("/signin", login);
+
+router.use((req, res) => {
+  res
+    .status(ERROR_404)
+    .send({ message: "The requested resource was not found" });
+});
 
 module.exports = router;

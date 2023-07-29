@@ -28,35 +28,39 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    minLength: 8,
     select: false,
   },
 });
 
-UserSchema.pre("save", function (next) {
+UserSchema.pre("save", function handlePasswordHash(next) {
   const user = this;
 
   if (!user.isModified("password")) {
     return next();
   }
 
-  bcrypt.hash(user.password, 10).then((hashedPassword) => {
-    user.password = hashedPassword;
-    next();
-  });
+  return bcrypt
+    .hash(user.password, 10)
+    .then((hashedPassword) => {
+      user.password = hashedPassword;
+      next();
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
 });
 
-UserSchema.statics.findUserByCredentials = function (email, password) {
+UserSchema.statics.findUserByCredentials = function findUser(email, password) {
   return this.findOne({ email })
     .select("+password")
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Error("Incorrect email or password"));
+        throw new Error("Incorrect email or password");
       }
 
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
-          return Promise.reject(new Error("Incorrect email or password"));
+          throw new Error("Incorrect email or password");
         }
 
         return user;
