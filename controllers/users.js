@@ -72,10 +72,8 @@ const updateUser = (req, res) => {
     new: true,
     runValidators: true,
   })
+    .orFail()
     .then((updatedUser) => {
-      if (!updatedUser) {
-        throw new Error("User not found");
-      }
       return res.status(StatusCodes.OK).send(updatedUser);
     })
     .catch((err) => handleError(req, res, err));

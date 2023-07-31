@@ -6,8 +6,8 @@ const User = require("./users");
 const { ERROR_404 } = require("../utils/errors");
 const { createUser, loginUser } = require("../controllers/users");
 
-router.use("/items", clothingItem);
-router.use("/users", User);
+router.use("/", clothingItem);
+router.use("/", User);
 
 router.post("/signup", createUser);
 router.post("/signin", loginUser);
