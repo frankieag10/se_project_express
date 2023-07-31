@@ -73,9 +73,7 @@ const updateUser = (req, res) => {
     runValidators: true,
   })
     .orFail()
-    .then((updatedUser) => {
-      return res.status(StatusCodes.OK).send(updatedUser);
-    })
+    .then((updatedUser) => res.status(StatusCodes.OK).send(updatedUser))
     .catch((err) => handleError(req, res, err));
 };
 
