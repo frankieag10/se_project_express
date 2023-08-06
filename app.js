@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
+const cors = require("cors");
 
 const routes = require("./routes");
 
@@ -24,6 +25,13 @@ const limiter = rateLimit({
 
 app.use(limiter);
 app.use(helmet());
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
+
 app.use(routes);
 
 app.listen(PORT, () => {
