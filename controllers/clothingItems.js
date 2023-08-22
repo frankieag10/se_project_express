@@ -14,12 +14,11 @@ const getClothingItem = (req, res) => {
 };
 
 const createClothingItem = (req, res) => {
-  console.log("user id: ", req.user._id);
   const { name, weather, imageUrl } = req.body;
   clothingItem
     .create({ name, weather, imageUrl, owner: req.user._id })
     .then((data) => {
-      res.status(StatusCodes.OK).send(data);
+      res.status(StatusCodes.CREATED).send(data);
     })
     .catch((err) => {
       handleError(req, res, err);
@@ -28,21 +27,28 @@ const createClothingItem = (req, res) => {
 
 const deleteClothingItem = (req, res) => {
   const { itemId } = req.params;
-
+  const loggedinUserId = req.user._id;
   clothingItem
-    .findById(itemId)
+    .findOne({ _id: itemId })
     .orFail()
     .then((item) => {
-      if (!item.owner.equals(req.user._id)) {
-        return res
-          .status(StatusCodes.FORBIDDEN)
-          .send({ message: "You do not have permission to delete this item" });
+      if (item.owner.equals(loggedinUserId)) {
+        console.log("Owner is authorized to delete.");
+        clothingItem
+          .findByIdAndDelete(itemId)
+          .orFail()
+          .then((data) => {
+            res.status(StatusCodes.OK).send(data.toJSON());
+          })
+          .catch((err) => {
+            console.error(err);
+            handleError(req, res, err);
+          });
+      } else {
+        res.status(StatusCodes.FORBIDDEN).send({
+          message: "You are not authorized to delete other user's item",
+        });
       }
-
-      return clothingItem.findByIdAndDelete(itemId);
-    })
-    .then((data) => {
-      res.status(StatusCodes.OK).send(data.toJSON());
     })
     .catch((err) => {
       handleError(req, res, err);
