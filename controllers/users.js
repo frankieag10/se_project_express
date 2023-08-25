@@ -7,7 +7,7 @@ const { JWT_SECRET } = require("../utils/config");
 
 const createUser = async (req, res) => {
   const { name, avatar, email, password } = req.body;
-
+  console.log(name, avatar);
   if (password.length < 8) {
     return res
       .status(StatusCodes.BAD_REQUEST)
@@ -49,12 +49,17 @@ const loginUser = async (req, res) => {
   }
 };
 
-const getCurrentUser = (req, res) =>
-  User.findById(req.user._id)
+const getCurrentUser = (req, res) => {
+  /* User.findById(req.user._id)
+  console.log(userId);
+  User.findById(userId)*/
+  const userId = req.user._id;
+  console.log(userId);
+  User.findById(userId)
     .orFail()
     .then((user) => res.status(StatusCodes.OK).send(user))
     .catch((err) => handleError(req, res, err));
-
+};
 const updateUser = (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ["name", "avatar"];

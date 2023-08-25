@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-UserSchema.pre("save", function handlePasswordHash(next) {
+/* UserSchema.pre("save", function handlePasswordHash(next) {
   const user = this;
 
   if (!user.isModified("password")) {
@@ -48,7 +48,7 @@ UserSchema.pre("save", function handlePasswordHash(next) {
     .catch((err) => {
       throw new Error(err);
     });
-});
+});*/
 
 UserSchema.statics.findUserByCredentials = function findUser(email, password) {
   return this.findOne({ email })
