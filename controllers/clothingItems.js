@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const clothingItem = require("../models/clothingItems");
 const { handleError } = require("../utils/config");
+const { ERROR_403 } = require("../utils/errors");
 
 const getClothingItem = (req, res) => {
   clothingItem

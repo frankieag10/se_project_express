@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/users");
 const { handleError } = require("../utils/config");
 const { JWT_SECRET } = require("../utils/config");
+const { ERROR_409, ERROR_401 } = require("../utils/errors");
 
 const createUser = async (req, res) => {
   const { name, avatar, email, password } = req.body;
