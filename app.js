@@ -3,17 +3,14 @@ const mongoose = require("mongoose");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const cors = require("cors");
-
 const routes = require("./routes");
 
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-
 const { PORT = 3001 } = process.env;
 const app = express();
-
 app.use(express.json());
 
 const limiter = rateLimit({

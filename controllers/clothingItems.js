@@ -15,6 +15,7 @@ const getClothingItem = (req, res) => {
 };
 
 const createClothingItem = (req, res) => {
+  console.log("user id: ", req.user._id);
   const { name, weather, imageUrl } = req.body;
   clothingItem
     .create({ name, weather, imageUrl, owner: req.user._id })
