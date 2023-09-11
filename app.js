@@ -4,6 +4,9 @@ const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const cors = require("cors");
 const routes = require("./routes");
+const { errorHandler } = require("./middlewares/error-handler");
+const { errors } = require("celebrate");
+const { requestLogger, errorLogger } = require("./middlewares/logger"); // Import the loggers
 
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db", {
   useNewUrlParser: true,
@@ -29,7 +32,15 @@ app.use(
   })
 );
 
+app.use(requestLogger);
+
 app.use(routes);
+
+app.use(errorLogger);
+
+app.use(errors());
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`App started on port: ${PORT}`);

@@ -1,7 +1,6 @@
 const clothingItem = require("../models/clothingItems");
-const { handleError } = require("../utils/config");
 
-module.exports.likeItem = async (req, res) => {
+module.exports.likeItem = async (req, res, next) => {
   try {
     const data = await clothingItem
       .findByIdAndUpdate(
@@ -12,11 +11,11 @@ module.exports.likeItem = async (req, res) => {
       .orFail();
     res.status(200).send(data);
   } catch (err) {
-    handleError(req, res, err);
+    next(err);
   }
 };
 
-module.exports.dislikeItem = async (req, res) => {
+module.exports.dislikeItem = async (req, res, next) => {
   try {
     const data = await clothingItem
       .findByIdAndUpdate(
@@ -27,6 +26,6 @@ module.exports.dislikeItem = async (req, res) => {
       .orFail();
     res.status(200).send(data);
   } catch (err) {
-    handleError(req, res, err);
+    next(err);
   }
 };

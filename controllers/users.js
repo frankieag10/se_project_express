@@ -2,13 +2,13 @@ const { StatusCodes } = require("http-status-codes");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
-const { handleError } = require("../utils/config");
+//const { handleError } = require("../utils/config");
 const { JWT_SECRET } = require("../utils/config");
 const { ERROR_409, ERROR_401 } = require("../utils/errors");
 
-const createUser = async (req, res) => {
+const createUser = async (req, res, next) => {
   const { name, avatar, email, password } = req.body;
-  console.log(name, avatar);
+
   if (password.length < 8) {
     return res
       .status(StatusCodes.BAD_REQUEST)
@@ -32,11 +32,11 @@ const createUser = async (req, res) => {
         message: "Email already exists. Please choose a different one.",
       });
     }
-    return handleError(req, res, err);
+    next(err);
   }
 };
 
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
@@ -44,24 +44,19 @@ const loginUser = async (req, res) => {
     const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" });
     return res.status(StatusCodes.OK).send({ token, user: user._id });
   } catch (err) {
-    return res
-      .status(StatusCodes.UNAUTHORIZED)
-      .send({ message: "Incorrect email or password" });
+    next(err);
   }
 };
 
-const getCurrentUser = (req, res) => {
-  /* User.findById(req.user._id)
-  console.log(userId);
-  User.findById(userId)*/
+const getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
-  console.log(userId);
   User.findById(userId)
     .orFail()
     .then((user) => res.status(StatusCodes.OK).send(user))
-    .catch((err) => handleError(req, res, err));
+    .catch((err) => next(err));
 };
-const updateUser = (req, res) => {
+
+const updateUser = (req, res, next) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ["name", "avatar"];
   const isValidOperation = updates.every((update) =>
@@ -74,13 +69,13 @@ const updateUser = (req, res) => {
       .send({ error: "Invalid updates!" });
   }
 
-  return User.findByIdAndUpdate(req.user._id, req.body, {
+  User.findByIdAndUpdate(req.user._id, req.body, {
     new: true,
     runValidators: true,
   })
     .orFail()
     .then((updatedUser) => res.status(StatusCodes.OK).send(updatedUser))
-    .catch((err) => handleError(req, res, err));
+    .catch((err) => next(err));
 };
 
 module.exports = {

@@ -3,18 +3,18 @@ const clothingItem = require("../models/clothingItems");
 const { handleError } = require("../utils/config");
 const { ERROR_403 } = require("../utils/errors");
 
-const getClothingItem = (req, res) => {
+const getClothingItem = (req, res, next) => {
   clothingItem
     .find({})
     .then((data) => {
       res.status(StatusCodes.OK).send(data);
     })
     .catch((err) => {
-      handleError(req, res, err);
+      next(err); // Pass the error to the error-handling middleware
     });
 };
 
-const createClothingItem = (req, res) => {
+const createClothingItem = (req, res, next) => {
   console.log("user id: ", req.user._id);
   const { name, weather, imageUrl } = req.body;
   clothingItem
@@ -23,11 +23,11 @@ const createClothingItem = (req, res) => {
       res.status(StatusCodes.CREATED).send(data);
     })
     .catch((err) => {
-      handleError(req, res, err);
+      next(err); // Pass the error to the error-handling middleware
     });
 };
 
-const deleteClothingItem = (req, res) => {
+const deleteClothingItem = (req, res, next) => {
   const { itemId } = req.params;
   const loggedinUserId = req.user._id;
   clothingItem
@@ -44,7 +44,7 @@ const deleteClothingItem = (req, res) => {
           })
           .catch((err) => {
             console.error(err);
-            handleError(req, res, err);
+            next(err);
           });
       } else {
         res.status(StatusCodes.FORBIDDEN).send({
@@ -53,7 +53,7 @@ const deleteClothingItem = (req, res) => {
       }
     })
     .catch((err) => {
-      handleError(req, res, err);
+      next(err);
     });
 };
 
