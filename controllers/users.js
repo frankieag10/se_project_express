@@ -2,7 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
-const { handleError } = require("../utils/config");
+//const { handleError } = require("../utils/config");
 const { JWT_SECRET } = require("../utils/config");
 const { ERROR_409, ERROR_401 } = require("../utils/errors");
 
@@ -32,7 +32,7 @@ const createUser = async (req, res, next) => {
         message: "Email already exists. Please choose a different one.",
       });
     }
-    handleError(req, res, err);
+    next(err);
   }
 };
 
@@ -44,7 +44,7 @@ const loginUser = async (req, res, next) => {
     const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" });
     return res.status(StatusCodes.OK).send({ token, user: user._id });
   } catch (err) {
-    handleError(req, res, err);
+    next(err);
   }
 };
 
