@@ -1,4 +1,4 @@
-const router = require("express").Router();
+/*const router = require("express").Router();
 
 const clothingItem = require("./clothingItems");
 const User = require("./users");
@@ -23,8 +23,8 @@ router.use((req, res) => {
 });
 
 module.exports = router;
-
-/*const router = require("express").Router();
+*/
+const router = require("express").Router();
 
 const clothingItemRouter = require("./clothingItems"); // Use a meaningful variable name
 const userRouter = require("./users"); // Use a meaningful variable name
@@ -50,4 +50,3 @@ router.use((req, res) => {
 });
 
 module.exports = router;
-*/
