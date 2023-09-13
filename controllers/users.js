@@ -6,7 +6,7 @@ const User = require("../models/users");
 const { JWT_SECRET } = require("../utils/config");
 const { ERROR_409, ERROR_401 } = require("../utils/errors");
 
-const createUser = async (req, res, next) => {
+/*const createUser = async (req, res, next) => {
   const { name, avatar, email, password } = req.body;
 
   if (password.length < 8) {
@@ -33,6 +33,37 @@ const createUser = async (req, res, next) => {
       });
     }
     next(err);
+  }
+};
+*/
+
+const createUser = async (req, res, next) => {
+  const { name, avatar, email, password } = req.body;
+
+  if (password && password.trim().length >= 8) {
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const user = await User.create({
+        name,
+        avatar,
+        email,
+        password: hashedPassword,
+      });
+      return res
+        .status(StatusCodes.OK)
+        .send({ user: user._id, email: user.email });
+    } catch (err) {
+      if (err.code === 11000) {
+        return res.status(StatusCodes.CONFLICT).send({
+          message: "Email already exists. Please choose a different one.",
+        });
+      }
+      next(err);
+    }
+  } else {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send({ message: "Password must be at least 8 characters long." });
   }
 };
 
