@@ -30,7 +30,6 @@ const limiter = rateLimit({
 
 app.use(limiter);
 app.use(helmet());
-app.use(errorHandler);
 app.use(errors());
 app.post("/signin", logInValidation, loginUser);
 app.post("/signup", userInfoValidation, createUser);
@@ -46,6 +45,7 @@ app.use(
 
 app.use(routes);
 
+app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`App started on port: ${PORT}`);
 });
