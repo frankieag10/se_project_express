@@ -6,7 +6,7 @@ const cors = require("cors");
 const routes = require("./routes");
 const { errorHandler } = require("./middlewares/error-handler");
 const { errors } = require("celebrate");
-const { createUser, loginUser } = require("./middlewares/error-handler");
+const { createUser, loginUser } = require("./controllers/users");
 const {
   userInfoValidation,
   logInValidation,

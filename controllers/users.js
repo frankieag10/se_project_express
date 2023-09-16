@@ -45,7 +45,7 @@ const loginUser = async (req, res, next) => {
     const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" });
     return res.status(StatusCodes.OK).send({ token, user: user._id });
   } catch (err) {
-    next(new NotFoundError("Incorrect email or password: 401"));
+    next(new NotFoundError("Incorrect email or password: 404"));
   }
 };
 
