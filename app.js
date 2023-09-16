@@ -55,6 +55,12 @@ const cors = require("cors");
 const routes = require("./routes");
 const { errorHandler } = require("./middlewares/error-handler");
 const { errors } = require("celebrate");
+const { createUser, loginUser } = require("./middlewares/error-handler");
+const {
+  userInfoValidation,
+  logInValidation,
+} = require("./middlewares/validation");
+const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db", {
   useNewUrlParser: true,
@@ -75,6 +81,11 @@ app.use(limiter);
 app.use(helmet());
 app.use(errorHandler);
 app.use(errors());
+app.post("/signin", logInValidation, loginUser);
+app.post("/signup", userInfoValidation, createUser);
+app.use(requestLogger);
+app.use(routes);
+app.use(errorLogger);
 
 app.use(
   cors({

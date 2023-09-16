@@ -2,40 +2,41 @@ const { StatusCodes } = require("http-status-codes");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
-//const { handleError } = require("../utils/config");
 const { JWT_SECRET } = require("../utils/config");
 const { ERROR_409, ERROR_401 } = require("../utils/errors");
+const NotFoundError = require("../errors/not-found-error");
+const UnauthorizedError = require("../errors/unauthorized-error");
 
-const createUser = async (req, res, next) => {
+// Create a new user
+const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
 
-  if (password && password.trim().length >= 8) {
-    try {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const user = await User.create({
-        name,
-        avatar,
-        email,
-        password: hashedPassword,
-      });
-      return res
-        .status(StatusCodes.OK)
-        .send({ user: user._id, email: user.email });
-    } catch (err) {
-      if (err.code === 11000) {
-        return res.status(StatusCodes.CONFLICT).send({
-          message: "Email already exists. Please choose a different one.",
+  // Check if the email already exists
+  User.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        // Hash the password
+        bcrypt.hash(password, 10).then((hash) => {
+          // Create the user
+          User.create({ name, avatar, email, password: hash })
+            .then(() => {
+              res.status(201).send({ name, email, avatar });
+            })
+            .catch((err) => {
+              handleError(req, res, err);
+            });
         });
+      } else {
+        // User already exists
+        res.status(ERROR_409).send({ message: "User already exists" });
       }
-      next(err);
-    }
-  } else {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .send({ message: "Password must be at least 8 characters long." });
-  }
+    })
+    .catch(() => {
+      next(new UnauthorizedError("You are not allowed to make changes"));
+    });
 };
 
+// Login user
 const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -44,18 +45,20 @@ const loginUser = async (req, res, next) => {
     const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" });
     return res.status(StatusCodes.OK).send({ token, user: user._id });
   } catch (err) {
-    next(err);
+    next(new NotFoundError("Incorrect email or password: 401"));
   }
 };
 
+// Get current user
 const getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
     .orFail()
     .then((user) => res.status(StatusCodes.OK).send(user))
-    .catch((err) => next(err));
+    .catch(() => next(new NotFoundError("User ID not found")));
 };
 
+// Update user information
 const updateUser = (req, res, next) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ["name", "avatar"];
@@ -75,7 +78,7 @@ const updateUser = (req, res, next) => {
   })
     .orFail()
     .then((updatedUser) => res.status(StatusCodes.OK).send(updatedUser))
-    .catch((err) => next(err));
+    .catch(() => next(new NotFoundError("User ID not found")));
 };
 
 module.exports = {
