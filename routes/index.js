@@ -1,5 +1,5 @@
 const router = require("express").Router();
-
+//update
 const clothingItem = require("./clothingItems");
 const User = require("./users");
 const itemRouter = require("./clothingItems");
@@ -15,6 +15,15 @@ router.use("/", likesRouter);
 
 router.post("/signup", createUser);
 router.post("/signin", loginUser);
+
+router.get("/users", (req, res) => {
+  const { authorization } = req.headers;
+  if (!authorization || !authorization.startsWith("Bearer")) {
+    res.status(400).send("Authorization is still required\n");
+  } else {
+    res.send(User);
+  }
+});
 
 router.use((req, res) => {
   res
