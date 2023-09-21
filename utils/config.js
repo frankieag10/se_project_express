@@ -1,6 +1,6 @@
 const { ERROR_400, ERROR_404, ERROR_500 } = require("./errors");
 
-const JWT_SECRET = "your_favorite_password";
+const JWT_SECRET = "eaglestoken";
 
 const handleError = (req, res, error) => {
   console.error(`error is : ${error}`);
