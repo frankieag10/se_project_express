@@ -17,9 +17,12 @@ mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
 const { PORT = 3001 } = process.env;
 const app = express();
+
 app.use(express.json());
+app.use(helmet());
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -27,15 +30,7 @@ const limiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
-
 app.use(limiter);
-app.use(helmet());
-app.use(errors());
-app.post("/signin", logInValidation, loginUser);
-app.post("/signup", userInfoValidation, createUser);
-app.use(requestLogger);
-app.use(routes);
-app.use(errorLogger);
 
 app.use(
   cors({
@@ -43,9 +38,22 @@ app.use(
   })
 );
 
+//requestLogger middleware before your routes
+app.use(requestLogger);
+
+// Define your routes
+app.post("/signin", logInValidation, loginUser);
+app.post("/signup", userInfoValidation, createUser);
+
+//errorLogger middleware after your routes
+app.use(errorLogger);
+
+// routes middleware once to include all your routes
 app.use(routes);
 
+//errorHandler middleware to handle errors
 app.use(errorHandler);
+
 app.listen(PORT, () => {
   console.log(`App started on port: ${PORT}`);
 });
