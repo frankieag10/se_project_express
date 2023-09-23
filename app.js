@@ -32,11 +32,13 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-app.use(
+/*app.use(
   cors({
     origin: "http://localhost:3000",
   })
-);
+);*/
+
+app.use(cors());
 
 //requestLogger middleware before your routes
 app.use(requestLogger);
