@@ -8,7 +8,7 @@ const validateURL = (value, helpers) => {
   return helpers.error("string.uri");
 };
 
-const clothingItemValidation = celebrate({
+module.exports.clothingItemValidation = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30).messages({
       "string.min": 'The minimum length of the "name" field is 2',
@@ -23,7 +23,7 @@ const clothingItemValidation = celebrate({
   }),
 });
 
-const userInfoValidation = celebrate({
+module.exports.userInfoValidation = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30).messages({
       "string.min": 'The minimum length of the "name" field is 2',
@@ -44,7 +44,7 @@ const userInfoValidation = celebrate({
   }),
 });
 
-const logInValidation = celebrate({
+module.exports.logInValidation = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().messages({
       "string.empty": 'The "email" field must be filled in',
@@ -56,13 +56,13 @@ const logInValidation = celebrate({
   }),
 });
 
-const idValidation = celebrate({
+module.exports.idValidation = celebrate({
   params: Joi.object().keys({
     itemId: Joi.string().hex().length(24).required(),
   }),
 });
 
-const updateUserValidation = celebrate({
+module.exports.updateUserValidation = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30).messages({
       "string.min": 'The minimum length of the "name" field is 2',
@@ -75,11 +75,3 @@ const updateUserValidation = celebrate({
     }),
   }),
 });
-
-module.exports = {
-  clothingItemValidation,
-  userInfoValidation,
-  logInValidation,
-  idValidation,
-  updateUserValidation,
-};
