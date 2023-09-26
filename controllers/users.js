@@ -66,29 +66,6 @@ const getCurrentUser = (req, res, next) => {
     });
 };
 
-// Update user information
-/*const updateUser = (req, res, next) => {
-  const updates = Object.keys(req.body);
-  const allowedUpdates = ["name", "avatar"];
-  const isValidOperation = updates.every((update) =>
-    allowedUpdates.includes(update)
-  );
-
-  if (!isValidOperation) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .send({ error: "Invalid updates!" });
-  }
-
-  User.findByIdAndUpdate(req.user._id, req.body, {
-    new: true,
-    runValidators: true,
-  })
-    .orFail()
-    .then((updatedUser) => res.status(StatusCodes.OK).send(updatedUser))
-    .catch(() => next(new NotFoundError("User ID not found")));
-};
-*/
 const updateUser = (req, res, next) => {
   const userId = req.user._id;
   const { name, avatar } = req.body;
