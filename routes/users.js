@@ -7,8 +7,8 @@ const { clothingItemValidation } = require("../middlewares/validation");
 router.use(auth);
 
 //user route with the appropriate HTTP method and callback function.
-router.get("/me", getCurrentUser);
+router.get("users/me", getCurrentUser);
 console.log({ auth, clothingItemValidation, updateUser });
-router.patch("/me", clothingItemValidation, updateUser);
+router.patch("users/me", clothingItemValidation, updateUser);
 
 module.exports = router;
