@@ -42,6 +42,7 @@ const router = require("express").Router();
 const clothingItemRouter = require("./clothingItems");
 const userRouter = require("./users");
 const likeRouter = require("./clothingItems");
+const NotFoundError = require("../errors/not-found-error");
 
 // Define routes
 router.use("/", clothingItemRouter);

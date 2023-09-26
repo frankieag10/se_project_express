@@ -50,14 +50,6 @@ const loginUser = async (req, res, next) => {
 };
 
 // Get current user
-/*const getCurrentUser = (req, res, next) => {
-  const userId = req.user._id;
-  User.findById(userId)
-    .orFail()
-    .then((user) => res.status(StatusCodes.OK).send(user))
-    .catch(() => next(new NotFoundError("User ID not found")));
-};*/
-
 const getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
   console.log(userId);
@@ -112,12 +104,6 @@ const updateUser = (req, res, next) => {
     .catch(() => {
       next(new NotFoundError("User Id not found"));
     });
-
-  // .catch((err) => {
-  //     console.log(err);
-  //     handleError(req, res, err);
-
-  // });
 };
 
 module.exports = {
