@@ -75,7 +75,7 @@ const getCurrentUser = (req, res, next) => {
 };
 
 // Update user information
-const updateUser = (req, res, next) => {
+/*const updateUser = (req, res, next) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ["name", "avatar"];
   const isValidOperation = updates.every((update) =>
@@ -95,6 +95,29 @@ const updateUser = (req, res, next) => {
     .orFail()
     .then((updatedUser) => res.status(StatusCodes.OK).send(updatedUser))
     .catch(() => next(new NotFoundError("User ID not found")));
+};
+*/
+const updateUser = (req, res, next) => {
+  const userId = req.user._id;
+  const { name, avatar } = req.body;
+  User.findByIdAndUpdate(
+    userId,
+    { $set: { name, avatar } },
+    { new: true, runValidators: true }
+  )
+    .orFail()
+    .then((data) => {
+      res.send(data);
+    })
+    .catch(() => {
+      next(new NotFoundError("User Id not found"));
+    });
+
+  // .catch((err) => {
+  //     console.log(err);
+  //     handleError(req, res, err);
+
+  // });
 };
 
 module.exports = {
