@@ -48,6 +48,8 @@ const {
   loginValidation,
   userInfoValidation,
 } = require("../middlewares/validation");
+const createUser = require("./users");
+const loginUser = require("./users");
 
 // Define routes
 router.use("/items", clothingItemRouter);
