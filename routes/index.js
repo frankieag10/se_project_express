@@ -39,7 +39,7 @@ const router = require("express").Router();
 //const { createUser, loginUser } = require("../controllers/users");
 
 // Import route modules
-const clothingItemRouter = require("./clothingItems");
+const itemRouter = require("./clothingItems");
 const userRouter = require("./users");
 const likeRouter = require("./clothingItems");
 const auth = require("../middlewares/auth");
@@ -48,10 +48,10 @@ const {
   loginValidation,
   userInfoValidation,
 } = require("../middlewares/validation");
-const { createUser, loginUser } = require("./users");
+const { createUser, loginUser } = require("../controllers/users");
 
 // Define routes
-router.use("/items", clothingItemRouter);
+router.use("/items", itemRouter);
 router.use("/users", auth, userRouter);
 router.use("/likes", likeRouter);
 
