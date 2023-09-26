@@ -55,6 +55,7 @@ app.use(routes);
 
 //errorHandler middleware to handle errors
 app.use(errorHandler);
+app.use(errors());
 
 app.listen(PORT, () => {
   console.log(`App started on port: ${PORT}`);
