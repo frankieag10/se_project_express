@@ -35,23 +35,23 @@ module.exports = router;
 */
 
 const router = require("express").Router();
-const { ERROR_404 } = require("../utils/errors");
-const { createUser, loginUser } = require("../controllers/users");
+//const { ERROR_404 } = require("../utils/errors");
+//const { createUser, loginUser } = require("../controllers/users");
 
 // Import route modules
 const clothingItemRouter = require("./clothingItems");
 const userRouter = require("./users");
-const likeRouter = require("./likes");
+const likeRouter = require("./clothingItems");
 
 // Define routes
-router.use("/clothingItems", clothingItemRouter);
-router.use("/users", userRouter);
-router.use("/likes", likeRouter);
+router.use("/", clothingItemRouter);
+router.use("/", userRouter);
+router.use("/", likeRouter);
 
-router.post("/signup", createUser);
-router.post("/signin", loginUser);
+//router.post("/signup", createUser);
+//router.post("/signin", loginUser);
 
-router.get("/users", (req, res) => {
+/*router.get("/users", (req, res) => {
   const { authorization } = req.headers;
   if (!authorization || !authorization.startsWith("Bearer")) {
     res.status(400).send("Authorization is still required\n");
@@ -59,11 +59,15 @@ router.get("/users", (req, res) => {
     res.send(User);
   }
 });
-
-router.use((req, res) => {
+*/
+/*router.use((req, res) => {
   res
     .status(ERROR_404)
     .send({ message: "The requested resource was not found" });
+});*/
+
+router.use(() => {
+  throw new NotFoundError(`The page you're looking for not found`);
 });
 
 module.exports = router;
