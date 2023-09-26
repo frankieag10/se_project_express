@@ -42,30 +42,20 @@ const router = require("express").Router();
 const clothingItemRouter = require("./clothingItems");
 const userRouter = require("./users");
 const likeRouter = require("./clothingItems");
+const auth = require("../middlewares/auth");
 const NotFoundError = require("../errors/not-found-error");
+const {
+  loginValidation,
+  userInfoValidation,
+} = require("../middlewares/validation");
 
 // Define routes
-router.use("/", clothingItemRouter);
-router.use("/", userRouter);
-router.use("/", likeRouter);
+router.use("/items", clothingItemRouter);
+router.use("/users", auth, userRouter);
+router.use("/likes", likeRouter);
 
-//router.post("/signup", createUser);
-//router.post("/signin", loginUser);
-
-/*router.get("/users", (req, res) => {
-  const { authorization } = req.headers;
-  if (!authorization || !authorization.startsWith("Bearer")) {
-    res.status(400).send("Authorization is still required\n");
-  } else {
-    res.send(User);
-  }
-});
-*/
-/*router.use((req, res) => {
-  res
-    .status(ERROR_404)
-    .send({ message: "The requested resource was not found" });
-});*/
+router.post("/signup", userInfoValidation, createUser);
+router.post("/signin", loginValidation, loginUser);
 
 router.use(() => {
   throw new NotFoundError(`The page you're looking for not found`);
