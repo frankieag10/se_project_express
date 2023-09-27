@@ -1,12 +1,13 @@
 const { StatusCodes } = require("http-status-codes");
 const clothingItem = require("../models/clothingItems");
+const BadRequestError = require("../errors/bad-request-error");
 const UnauthorizedError = require("../errors/unauthorized-error");
 const NotFoundError = require("../errors/not-found-error");
 
 const getClothingItem = async (req, res, next) => {
   try {
     const data = await clothingItem.find({});
-    res.status(StatusCodes.OK).send(data);
+    res.status(200).send(data);
   } catch (error) {
     console.error(error);
     next(new NotFoundError("Data not found"));
@@ -25,7 +26,7 @@ const createClothingItem = async (req, res, next) => {
     res.status(StatusCodes.CREATED).send(data);
   } catch (error) {
     console.error(error);
-    next(new UnauthorizedError("You are not allowed to create this item"));
+    next(new BadRequestError("You are not allowed to create this item"));
   }
 };
 
@@ -35,7 +36,6 @@ const deleteClothingItem = async (req, res, next) => {
 
   try {
     const item = await clothingItem.findOne({ _id: itemId }).orFail();
-
     if (item.owner.equals(loggedinUserId)) {
       console.log("Owner is authorized to delete.");
       const data = await clothingItem.findByIdAndDelete(itemId).orFail();

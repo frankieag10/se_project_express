@@ -6,47 +6,54 @@ const { JWT_SECRET } = require("../utils/config");
 const { ERROR_409, ERROR_401 } = require("../utils/errors");
 const NotFoundError = require("../errors/not-found-error");
 const UnauthorizedError = require("../errors/unauthorized-error");
+const BadRequestError = require("../errors/bad-request-error");
+const ConflictError = require("../errors/conflict-error");
 
 // Create a new user
+// POST /users — creates a new user
 const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
-
-  // Check if the email already exists
   User.findOne({ email })
     .then((user) => {
       if (!user) {
-        // Hash the password
         bcrypt.hash(password, 10).then((hash) => {
-          // Create the user
           User.create({ name, avatar, email, password: hash })
             .then(() => {
               res.status(201).send({ name, email, avatar });
             })
             .catch((err) => {
-              handleError(req, res, err);
+              if (err.name === "ValidationError") {
+                next(new BadRequestError("Invalid data"));
+              } else {
+                next(err);
+              }
             });
         });
       } else {
-        // User already exists
-        res.status(ERROR_409).send({ message: "User already exists" });
+        throw new ConflictError(
+          `The request wasn't completed because of a conflict with the resource's current state.`
+        );
       }
     })
-    .catch(() => {
-      next(new UnauthorizedError("You are not allowed to make changes"));
+    .catch((err) => {
+      next(err);
     });
 };
 
 // Login user
-const loginUser = async (req, res, next) => {
+const loginUser = (req, res, next) => {
   const { email, password } = req.body;
-
-  try {
-    const user = await User.findUserByCredentials(email, password);
-    const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" });
-    return res.status(StatusCodes.OK).send({ token, user: user._id });
-  } catch (err) {
-    next(new NotFoundError("Incorrect email or password: 404"));
-  }
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      res.send({
+        token: jwt.sign({ _id: user._id }, JWT_SECRET, {
+          expiresIn: "7d",
+        }),
+      });
+    })
+    .catch(() => {
+      next(new UnauthorizedError("The Email or user name is wrong: 401"));
+    });
 };
 
 // Get current user
@@ -78,8 +85,12 @@ const updateUser = (req, res, next) => {
     .then((data) => {
       res.send(data);
     })
-    .catch(() => {
-      next(new NotFoundError("User Id not found"));
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        next(new BadRequestError("Invalid data"));
+      } else {
+        next(err);
+      }
     });
 };
 
