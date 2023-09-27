@@ -25,13 +25,6 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 app.use(limiter);
-
-/*app.use(
-  cors({
-    origin: "http://localhost:3000",
-  })
-);*/
-
 app.use(cors());
 app.use(helmet());
 
