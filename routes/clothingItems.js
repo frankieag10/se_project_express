@@ -13,8 +13,8 @@ const {
   idValidation,
 } = require("../middlewares/validation");
 
-// GET /items — returns all clothing items
-router.get("/items", (req, res) => {
+/*// GET /items — returns all clothing items
+router.get("/", (req, res) => {
   console.log("GET /items"); // Added console.log
   getClothingItem(req, res);
 });
@@ -42,5 +42,14 @@ router.delete("/:itemId/likes", auth, (req, res) => {
   console.log("DELETE /items/:itemId/likes"); // Added console.log
   idValidation(req, res, () => dislikeItem(req, res));
 });
+
+module.exports = router;
+*/
+
+router.get("/", getClothingItem);
+router.post("/", auth, clothingItemValidation, createClothingItem);
+router.delete("/:itemId", auth, idValidation, deleteClothingItem);
+router.put("/:itemId/likes", auth, idValidation, likeItem);
+router.delete("/:itemId/likes", auth, idValidation, dislikeItem);
 
 module.exports = router;

@@ -2,6 +2,7 @@ const router = require("express").Router();
 const NotFoundError = require("../errors/not-found-error");
 const userRouter = require("./users");
 const itemRouter = require("./clothingItems");
+const likesRouter = require("./clothingItems");
 const { loginUser, createUser } = require("../controllers/users");
 const {
   logInValidation,
@@ -18,6 +19,7 @@ router.post("/signin", logInValidation, loginUser);
 router.post("/signup", userInfoValidation, createUser);
 router.use("/items", itemRouter);
 router.use("/users", userRouter);
+router.use("/likes", likesRouter);
 
 // Add a console log for route entry
 router.use(
