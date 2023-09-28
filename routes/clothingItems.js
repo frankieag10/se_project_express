@@ -14,7 +14,7 @@ const {
 } = require("../middlewares/validation");
 
 // GET /items — returns all clothing items
-router.get("/", (req, res) => {
+router.get("/items", (req, res) => {
   console.log("GET /items"); // Added console.log
   getClothingItem(req, res);
 });
