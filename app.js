@@ -29,16 +29,42 @@ app.use(limiter);
 app.use(cors());
 app.use(helmet());
 
+// Add console log to indicate the server is starting
+console.log("Starting the server...");
+
 //requestLogger middleware before your routes
 app.use(requestLogger);
-app.post("/signin", logInValidation, loginUser);
-app.post("/signup", userInfoValidation, createUser);
+app.post(
+  "/signin",
+  (req, res, next) => {
+    console.log("Received a POST request at /signin");
+    logInValidation(req, res, next);
+  },
+  loginUser
+);
+
+app.post(
+  "/signup",
+  (req, res, next) => {
+    console.log("Received a POST request at /signup");
+    userInfoValidation(req, res, next);
+  },
+  createUser
+);
+
 app.use(routes);
+
+// Add console log for indicating that routes are set up
+console.log("Routes are set up.");
 
 app.use(errorLogger);
 app.use(errors());
 
+// Add console log for indicating that error handlers are set up
+console.log("Error handlers are set up.");
+
 app.use(errorHandler);
+
 app.listen(PORT, () => {
   console.log(`App started on port: ${PORT}`);
 });
