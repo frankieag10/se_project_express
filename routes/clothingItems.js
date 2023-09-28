@@ -48,8 +48,8 @@ module.exports = router;
 
 router.get("/", getClothingItem);
 router.post("/", auth, clothingItemValidation, createClothingItem);
-router.delete("/:itemId", auth, idValidation, deleteClothingItem);
-router.put("/:itemId/likes", auth, idValidation, likeItem);
-router.delete("/:itemId/likes", auth, idValidation, dislikeItem);
+router.delete("/items/:itemId", auth, idValidation, deleteClothingItem);
+router.put("/items/:itemId/likes", auth, idValidation, likeItem);
+router.delete("/items/:itemId/likes", auth, idValidation, dislikeItem);
 
 module.exports = router;

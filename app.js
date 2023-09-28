@@ -34,24 +34,8 @@ console.log("Starting the server...");
 
 //requestLogger middleware before your routes
 app.use(requestLogger);
-app.post(
-  "/signin",
-  (req, res, next) => {
-    console.log("Received a POST request at /signin");
-    logInValidation(req, res, next);
-  },
-  loginUser
-);
-
-app.post(
-  "/signup",
-  (req, res, next) => {
-    console.log("Received a POST request at /signup");
-    userInfoValidation(req, res, next);
-  },
-  createUser
-);
-
+app.post("/signin", logInValidation, loginUser);
+app.post("/signup", userInfoValidation, createUser);
 app.use(routes);
 
 // Add console log for indicating that routes are set up
