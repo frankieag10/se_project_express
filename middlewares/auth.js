@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../utils/config");
 const UnauthorizedError = require("../errors/unauthorized-error");
 
-const handleAuthError = (res, error) => {
+const handleAuthError = () => {
   console.error(error);
   console.log("Unauthorized Error: 401");
   throw new UnauthorizedError("Unauthorized Error: 401");
@@ -22,13 +22,13 @@ module.exports = (req, res, next) => {
 
   try {
     payload = jwt.verify(token, JWT_SECRET);
-  } catch (error) {
-    console.error("JWT Verification Error:", error);
-    return handleAuthError(res, error);
+  } catch (err) {
+    console.error("JWT Verification Error:");
+    return handleAuthError(res);
   }
 
   req.user = payload;
-  console.log("Authenticated User:", req.user);
+  console.log("Authenticated User:");
 
   return next();
 };

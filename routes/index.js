@@ -9,6 +9,12 @@ const {
   userInfoValidation,
 } = require("../middlewares/validation");
 
+// Add a console log for route entry
+router.use((req, res, next) => {
+  console.log(`Entering route: ${req.url}`);
+  next();
+});
+
 //router.post("/signin", logInValidation, loginUser);
 //router.post("/signup", userInfoValidation, createUser);
 router.use("/", userRouter);
