@@ -9,16 +9,8 @@
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/frankieag10/se_project_express.git"
-  },
   "author": "frank aguirre",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/frankieag10/se_project_express/issues"
-  },
-  "homepage": "https://github.com/frankieag10/se_project_express#readme",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",

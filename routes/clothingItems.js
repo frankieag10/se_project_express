@@ -46,8 +46,8 @@ router.delete("/:itemId/likes", auth, (req, res) => {
 module.exports = router;
 */
 
-router.get("/", getClothingItem);
-router.post("/", auth, clothingItemValidation, createClothingItem);
+router.get("/items", getClothingItem);
+router.post("/items", auth, clothingItemValidation, createClothingItem);
 router.delete("/items/:itemId", auth, idValidation, deleteClothingItem);
 router.put("/items/:itemId/likes", auth, idValidation, likeItem);
 router.delete("/items/:itemId/likes", auth, idValidation, dislikeItem);
