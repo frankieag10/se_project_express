@@ -1,5 +1,4 @@
 const clothingItem = require("../models/clothingItems");
-const UnauthorizedError = require("../errors/unauthorized-error");
 const NotFoundError = require("../errors/not-found-error");
 
 // PUT / items /: itemId / likes — like an item
