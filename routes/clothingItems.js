@@ -3,9 +3,8 @@ const {
   getClothingItem,
   createClothingItem,
   deleteClothingItem,
-  likeItem,
-  dislikeItem,
 } = require("../controllers/clothingItems");
+const { likeItem, dislikeItem } = require("../controllers/likes");
 const {
   clothingItemValidation,
   idValidation,
