@@ -82,7 +82,7 @@ const updateUser = (req, res, next) => {
     { $set: { name, avatar } },
     { new: true, runValidators: true }
   )
-    .orFail()
+    .orFail(() => new NotFoundError("the request resource Not Found!"))
     .then((data) => {
       res.send(data);
     })
