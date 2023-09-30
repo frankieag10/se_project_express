@@ -1,15 +1,12 @@
-const { StatusCodes } = require("http-status-codes");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
 const { JWT_SECRET } = require("../utils/config");
-const { ERROR_409, ERROR_401 } = require("../utils/errors");
 const NotFoundError = require("../errors/not-found-error");
 const UnauthorizedError = require("../errors/unauthorized-error");
 const BadRequestError = require("../errors/bad-request-error");
 const ConflictError = require("../errors/conflict-error");
 
-// Create a new user
 // POST /users — creates a new user
 const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
@@ -59,20 +56,24 @@ const loginUser = (req, res, next) => {
 // Get current user
 const getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
+
   console.log(userId);
+
   User.findById(userId)
-    .orFail()
+    .orFail(() => new NotFoundError("The requested resource Not Found!"))
     .then((data) => {
       if (!data) {
         throw new NotFoundError("No user with matching ID found");
       }
       res.send(data);
     })
-    .catch(() => {
-      next(new NotFoundError("The User Id not found"));
+    .catch((error) => {
+      console.error(error);
+      next(error);
     });
 };
 
+// update user
 const updateUser = (req, res, next) => {
   const userId = req.user._id;
   const { name, avatar } = req.body;

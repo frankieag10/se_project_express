@@ -20,3 +20,11 @@ ESLint : ESLint is a static code analysis tool for identifying problematic patte
 npm run start — to launch the server
 
 npm run dev — to launch the server with the hot reload feature
+
+# Backend
+
+api.frankieswtwr.crabdance.com
+
+# Frontend
+
+www.frankieswtwr.crabdance.com, frankieswtwr.crabdance.com

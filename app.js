@@ -4,15 +4,15 @@ const mongoose = require("mongoose");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const cors = require("cors");
-const routes = require("./routes");
-const { errorHandler } = require("./middlewares/error-handler");
 const { errors } = require("celebrate");
+const { errorHandler } = require("./middlewares/error-handler");
 const { createUser, loginUser } = require("./controllers/users");
 const {
   userInfoValidation,
   logInValidation,
 } = require("./middlewares/validation");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
+const routes = require("./routes");
 
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db");
 const { PORT = 3001 } = process.env;
@@ -32,7 +32,6 @@ app.use(helmet());
 // Add console log to indicate the server is starting
 console.log("Starting the server...");
 
-//requestLogger middleware before your routes
 app.use(requestLogger);
 app.post("/signin", logInValidation, loginUser);
 app.post("/signup", userInfoValidation, createUser);
