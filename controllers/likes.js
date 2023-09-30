@@ -28,6 +28,6 @@ module.exports.dislikeItem = (req, res, next) => {
     .then((data) => res.status(200).send(data))
     .catch((error) => {
       console.error(error);
-      next(new UnauthorizedError("You are not allowed to make changes"));
+      next(error);
     });
 };
